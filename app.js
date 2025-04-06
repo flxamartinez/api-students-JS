@@ -3,15 +3,15 @@ const bodyParser = require('body-parser');
 const { Sequelize, Model, DataTypes } = require('sequelize');
 
 const app = express();
-const port = 8001;  // O el puerto que prefieras
+const port = 8001;  // Puerto en el que el servidor escuchará
 
-// Create Sequelize instance
+// Crear instancia de Sequelize
 const sequelize = new Sequelize({
   dialect: 'sqlite',
   storage: './database.sqlite'  // Archivo de base de datos SQLite
 });
 
-// Define User model
+// Definir el modelo de User
 class User extends Model {}
 User.init({
   name: DataTypes.STRING,
@@ -19,14 +19,14 @@ User.init({
   password: DataTypes.STRING
 }, { sequelize, modelName: 'user' });
 
-// Sync models with database
+// Sincronizar los modelos con la base de datos
 sequelize.sync();
 
-// Middleware for parsing request body
+// Middleware para analizar el cuerpo de las solicitudes
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-// CRUD routes for User model
+// Rutas CRUD para el modelo User
 app.get('/users', async (req, res) => {
   const users = await User.findAll();
   res.json(users);
@@ -62,7 +62,7 @@ app.delete('/users/:id', async (req, res) => {
   }
 });
 
-// Start server
+// Iniciar el servidor
 app.listen(port, () => {
   console.log(`Server listening on port ${port}`);
 });
